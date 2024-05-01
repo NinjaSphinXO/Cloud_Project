@@ -1,9 +1,17 @@
 from flask import Flask
 import mysql.connector
+import datetime
+
+current_time = datetime.datetime.now()
+
+greeting = (
+        "Good morning"
+        if current_time.hour < 12
+        else "Good afternoon" if current_time.hour < 18 else "Good evening"
+    )
 
 app = Flask(__name__)
 
-# Database connection details
 DB_CONFIG = {
     "host": "db",
     "port": "3306",
@@ -13,7 +21,6 @@ DB_CONFIG = {
 }
 
 
-# Function to fetch team members from database
 def get_team_members():
 
         connection = mysql.connector.connect(**DB_CONFIG)
@@ -23,19 +30,9 @@ def get_team_members():
         return team_members
 
 
-# Homepage with a button to navigate to the database page
 @app.route("/")
 def home():
-    # Dynamic greeting message based on the time of the day
-    import datetime
-
-    current_time = datetime.datetime.now()
-    greeting = (
-        "Good morning"
-        if current_time.hour < 12
-        else "Good afternoon" if current_time.hour < 18 else "Good evening"
-    )
-
+    
     return f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -111,7 +108,6 @@ def home():
     """
 
 
-# Route to display team members
 @app.route("/team-members")
 def team_members():
     team_members = get_team_members()
@@ -134,7 +130,7 @@ def team_members():
             <style>
                 body {{
                     font-family: Arial, sans-serif;
-                    background-image: url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+                    background-image: url('https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=1752&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
                     background-size: cover;
                     background-position: center;
                     color: #ffffff;
@@ -210,4 +206,4 @@ def team_members():
 
 
 if __name__ == "__main__":
-    app.run('0.0.0.0')
+    app.run()
